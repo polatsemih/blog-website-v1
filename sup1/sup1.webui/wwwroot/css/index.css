@@ -1,0 +1,103 @@
+/* INDEX SETTINGS */
+
+.index-title {
+    font-family: var(--family-primary);
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.index-text {
+    font-family: var(--family-primary);
+    font-size: 16px;
+    font-weight: 400;
+}
+
+
+/* HOME SETTINGS */
+
+.section-home {
+    position: relative;
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    background-image: url("../images/home.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+}
+
+.home-title,
+.home-text {
+    color: var(--color-light-primary);
+    line-height: 1.6;
+}
+
+.home-text {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* ABOUT SETTINGS */
+
+.section-about {
+    width: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.about-title,
+.about-text-title {
+    color: var(--color-dark-primary);
+    line-height: 1.2;
+}
+
+.about-text-title {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.about-text {
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
+
+.about-image {
+    width: 100%;
+}
+
+
+/* MEDIA SETTINGS */
+
+@media screen and (min-width: 768px) {
+    /* INDEX SETTINGS */
+    .index-title {
+        letter-spacing: 3px;
+    }
+    .index-text {
+        font-size: 18px;
+    }
+    /* HOME SETTINGS */
+    .home-content {
+        max-width: 60vw;
+    }
+    .about-image {
+        width: 60%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    /* INDEX SETTINGS */
+    .index-text {
+        font-size: 20px;
+    }
+    /* ABOUT SETTINGS */
+    .about-image {
+        width: 100%;
+    }
+}

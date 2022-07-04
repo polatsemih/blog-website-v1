@@ -1,0 +1,100 @@
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/confirm.css">
+    <link rel="stylesheet" href="/folder/css/result_message.css">
+    <link rel="stylesheet" href="/folder/css/admin_panel.css">
+    <link rel="stylesheet" href="/folder/css/table.css">
+}
+
+@foreach (var item in ViewBag.Categories)
+{
+    <div class="confirm-container confirm-container-@(item.CategoryId)">
+        <div class="confirm-content">
+            <p class="confirm-text">Are you sure you want to delete "@(item.Name)"?</p>
+            <p class="confirm-text text-danger">This action cannot be undone and all articles belonging to this category will be deleted</p>
+            <button class="button button-medium button-danger mr-10" id="button-cancel-@(item.CategoryId)">Cancel</button>
+            <button class="button button-medium button-success" id="button-confirm-@(item.CategoryId)">Yes</button>
+        </div>
+    </div>
+}
+
+@if (TempData["message"] != null)
+{
+    <partial name="_ResultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
+}
+
+<section class="section">
+    <div class="container">
+        <h3 class="section-title">Category List</h3>
+        <a class="button button-medium button-theme mb-20" asp-controller="Admin" asp-action="CategoryCreate">Create Category</a>
+        @if (ViewBag.CategoriesCount > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>    
+                        <th style="width: 21%;">Id</th>
+                        <th style="width: 27%;">Role Name</th>
+                        <th style="width: 27%;">Url</th>
+                        <th style="width: 16%;">Date Added</th>
+                        <th style="width: 10%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.Categories)
+                    {
+                        <tr>
+                            <td>@item.CategoryId</td>
+                            <td>@item.Name</td>
+                            <td>@item.Url</td>
+                            <td>@item.DateAdded</td>
+                            <td>
+                                <div class="row-panel-buttons">
+                                    <a asp-controller="Admin" asp-action="CategoryEdit" asp-route-categoryId="@item.CategoryId" class="button button-small button-theme mb-10 mr-5" title="Edit"><i class="fas fa-edit admin-panel-icon"></i></a>
+
+                                    <form asp-controller="Admin" asp-action="DeleteCategory" method="POST" id="form-confirm-@(item.CategoryId)">
+                                        <input type="hidden" name="categoryId" value="@item.CategoryId">
+                                        <button type="submit" class="button button-small button-theme mb-10 mr-5" id="button-form-@(item.CategoryId)" title="Delete"><i class="far fa-trash-alt admin-panel-icon"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert">
+                <p class="alert-text text-danger">No Category Available</p>
+            </div>
+        }
+    </div>
+</section>
+
+@section Scripts
+{
+    @if (TempData["message"] != null)
+    {
+        <script src="/folder/js/result_message.js"></script>
+    }
+    @foreach (var item in ViewBag.Categories)
+    {
+        <script>
+            document.querySelector('#button-form-@(item.CategoryId)').addEventListener('click', (e) => {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                document.querySelector('.confirm-container-@(item.CategoryId)').classList.add("active");
+            });
+
+            document.querySelector('#button-confirm-@(item.CategoryId)').addEventListener('click', () => {
+                document.querySelector('#form-confirm-@(item.CategoryId)').submit();
+                document.querySelector('.confirm-container-@(item.CategoryId)').classList.remove("active");
+            });
+
+            document.querySelector('#button-cancel-@(item.CategoryId)').addEventListener('click', () => {
+                document.querySelector('.confirm-container-@(item.CategoryId)').classList.remove("active");
+            });
+        </script>
+    }
+}

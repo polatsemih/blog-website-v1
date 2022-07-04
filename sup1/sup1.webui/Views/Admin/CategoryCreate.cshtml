@@ -1,0 +1,43 @@
+@model CategoryModel
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/confirm.css">
+}
+
+<div class="confirm-container">
+    <div class="confirm-content">
+        <p class="confirm-text">Are you sure you want to insert new category?</p>
+        <button class="button button-medium button-danger mr-10" id="button-cancel">Cancel</button>
+        <button class="button button-medium button-success" id="button-confirm">Yes</button>
+    </div>
+</div>
+
+<div class="section-center">
+    <div class="container">
+        <div class="form-container">
+            <h3 class="section-title">Create Category</h3>
+            <form asp-controller="Admin" asp-action="CategoryCreate" method="POST" id="form-confirm" autocomplete="off">
+                <div class="form-group">
+                    <label asp-for="Name" class="form-label-icon"><i class="fas fa-tag form-icon"></i></label>
+                    <input asp-for="Name" class="form-item" placeholder="Category Name" tabindex="1">
+                </div>
+                <div class="form-group">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="button button-medium button-theme flex-right" id="button-form" tabindex="2">Create Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="/folder/js/confirm.js"></script>
+    <script src="/library/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/library/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

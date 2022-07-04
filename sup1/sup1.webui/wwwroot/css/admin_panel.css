@@ -1,0 +1,64 @@
+.admin-panel-form-container {
+    width: 100%;
+    background-color: var(--color-light-primary);
+    border-radius: 5px;
+    box-shadow: var(--box-shadow-1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.row-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.row-panel-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.admin-panel-icon {
+    font-size: 16px;
+}
+
+.admin-panel-container {
+    width: 100%;
+}
+
+@media only screen and (min-width: 576px) {
+    .admin-panel-container {
+        max-width: 540px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .admin-panel-container {
+        max-width: 720px;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .admin-panel-container {
+        max-width: 960px;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .admin-panel-container {
+        max-width: 1140px;
+    }
+    .row-panel-buttons {
+        justify-content: space-between;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    .admin-panel-container {
+        max-width: 1320px;
+    }
+}

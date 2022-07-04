@@ -1,0 +1,40 @@
+/* ADMIN IFORMATIONS SETTINGS */
+
+.image-admin {
+    width: 200px;
+    height: auto;
+    border-radius: 50%;
+}
+
+.admin-informations {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.admin-info-title {
+    font-family: var(--family-primary);
+    color: var(--color-theme-primary);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.admin-info-text {
+    font-family: var(--family-primary);
+    color: var(--color-dark-primary);
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+.admin-info-social {
+    font-family: var(--family-primary);
+    font-size: 16px;
+    font-weight: 400;
+}
+
+@media only screen and (min-width: 768px) {
+    .admin-info-text {
+        font-size: 17px;
+    }
+}

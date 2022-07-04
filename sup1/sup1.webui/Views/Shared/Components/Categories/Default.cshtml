@@ -1,0 +1,33 @@
+@model List<Category>
+
+<nav class="navigation-category">
+    <ul>
+        @if (User.IsInRole("admin"))
+        {
+            <li class="category-item">
+                <a asp-controller="Admin" asp-action="ArticleAdminList" class="category-link">All Main Articles</a>
+            </li>
+        }
+        else
+        {
+            <li class="category-item">
+                <a asp-controller="Home" asp-action="Article" class="category-link">All Main Articles</a>
+            </li>
+        }
+        @foreach (var category in Model)
+        {
+            @if (User.IsInRole("admin"))
+            {
+                <li class="category-item @(ViewBag.SelectedCategory == category.Url?"active":"")">
+                    <a asp-controller="Admin" asp-action="ArticleCategoryAdmin" asp-route-category="@category.Url" class="category-link">@category.Name</a>
+                </li>
+            }
+            else
+            {
+                <li class="category-item @(ViewBag.SelectedCategory == category.Url?"active":"")">
+                    <a asp-controller="Home" asp-action="ArticleCategory" asp-route-category="@category.Url" class="category-link">@category.Name</a>
+                </li>
+            }
+        }
+    </ul>
+</nav>

@@ -1,0 +1,33 @@
+/* CATEGORY SETTINGS */
+
+.navigation-category {
+    background-color: var(--color-light-primary);
+    box-shadow: var(--box-shadow-1);
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.category-item {
+    border-bottom: 1px solid #d1d1d1c2;
+    transition: background-color 0.3s ease;
+}
+
+.category-item:hover {
+    background-color: #d1d1d1c2;
+}
+
+.category-link {
+    color: var(--color-dark-primary);
+    font-family: var(--family-primary);
+    font-size: 16px;
+    font-weight: 400;
+    display: block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.category-item.active {
+    background-color: #b4b4b46b;
+}

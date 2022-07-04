@@ -1,0 +1,152 @@
+@model ArticleListViewModel
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/article.css">
+    <link rel="stylesheet" href="/folder/css/article_preview.css">
+    <link rel="stylesheet" href="/folder/css/pagination.css">
+    <link rel="stylesheet" href="/folder/css/admin_informations.css">
+    <link rel="stylesheet" href="/folder/css/search.css">
+    <link rel="stylesheet" href="/folder/css/category.css">
+    <link rel="stylesheet" href="/folder/css/confirm.css">
+    <link rel="stylesheet" href="/folder/css/result_message.css">
+}
+
+@foreach (var item in Model.Articles)
+{
+    @await Html.PartialAsync("_article_confirm", item)
+}
+
+@if (TempData["message"] != null)
+{
+    <partial name="_ResultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
+}
+
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-9">
+                <div class="section-container">
+                    <div class="row">
+                        <h3 class="text-theme-secondary">@User.Identity.Name</h3>
+                        <a asp-controller="Admin" asp-action="ArticleCreate" class="button button-medium button-theme button-flex-right">Create Article</a>
+                    </div>
+                </div>
+                @if (Model.PageInfo.TotalItems > 0)
+                {
+                    @foreach (var item in Model.Articles)
+                    {
+                        @await Html.PartialAsync("_admin_article", item)
+                    }
+                }
+                else
+                {
+                    <div class="alert">
+                        <p class="alert-text text-danger">No Article Available</p>
+                    </div>
+                }
+                
+                @if (Model.PageInfo.TotalItems > Model.PageInfo.ItemsPerPage)
+                {
+                    <div class="row-pagination">
+                        <nav>
+                            <ul class="pagination">
+                                @{
+                                    if((string)@Context.Request.Query["page"] == null)
+                                    {
+                                        <li class="page-item"><button class="page-link" disabled>Previous</button></li>
+                                    }
+                                    else
+                                    {
+                                        int previousPage;
+                                        if (int.Parse(@Context.Request.Query["page"]) > 1)
+                                        {
+                                            previousPage = (int.Parse(@Context.Request.Query["page"]) - 1);
+                                            <li class="page-item"><a class="page-link" asp-controller="Admin" asp-action="ArticleAdminList" asp-route-page="@previousPage">Previous</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item"><button class="page-link" disabled>Previous</button></li>
+                                        }
+                                    }  
+                                }
+
+                                @for (int i = 0; i < @Model.PageInfo.TotalPages(); i++)
+                                {
+                                    <li class="page-item @(Model.PageInfo.CurrentPage == i+1?"active":"")">
+                                        <a class="page-link" href="/article/admin?page=@(i+1)">
+                                            @(i+1)
+                                        </a>
+                                    </li>
+                                }
+
+                                @{
+                                    int nextPage;
+
+                                    if((string)@Context.Request.Query["page"] == null)
+                                    {
+                                        int page = 1;
+                                        if (page < Model.PageInfo.TotalPages())
+                                        {
+                                            nextPage = page + 1;
+                                            <li class="page-item"><a class="page-link" asp-controller="Admin" asp-action="ArticleAdminList" asp-route-page="@nextPage">Next</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item"><button class="page-link" disabled>Next</button></li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (int.Parse(@Context.Request.Query["page"]) < Model.PageInfo.TotalPages())
+                                        {
+                                            nextPage = int.Parse(@Context.Request.Query["page"]) + 1;
+                                            <li class="page-item"><a class="page-link" asp-controller="Admin" asp-action="ArticleAdminList" asp-route-page="@nextPage">Next</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item"><button class="page-link" disabled>Next</button></li>
+                                        }
+                                    }
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                }
+            </div>
+
+            <div class="col-3 flex-reverse">
+                @await Html.PartialAsync("_admin_informations")
+                @await Html.PartialAsync("_search")
+                @await Component.InvokeAsync("Categories")
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    @if (TempData["message"] != null)
+    {
+        <script src="/folder/js/result_message.js"></script>
+    }
+    @foreach (var item in Model.Articles)
+    {
+        <script>
+            document.querySelector('#button-form-@(item.ArticleId)').addEventListener('click', (e) => {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                document.querySelector('.confirm-container-@(item.ArticleId)').classList.add("active");
+            });
+
+            document.querySelector('#button-confirm-@(item.ArticleId)').addEventListener('click', () => {
+                document.querySelector('#form-confirm-@(item.ArticleId)').submit();
+                document.querySelector('.confirm-container-@(item.ArticleId)').classList.remove("active");
+            });
+
+            document.querySelector('#button-cancel-@(item.ArticleId)').addEventListener('click', () => {
+                document.querySelector('.confirm-container-@(item.ArticleId)').classList.remove("active");
+            });
+        </script>
+    }
+}

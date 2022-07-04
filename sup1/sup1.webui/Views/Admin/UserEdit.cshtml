@@ -1,0 +1,121 @@
+@model UserDetailsModel
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/confirm.css">
+    <link rel="stylesheet" href="/folder/css/checkbox.css">
+    <link rel="stylesheet" href="/folder/css/upload_image.css">
+}
+
+<div class="confirm-container">
+    <div class="confirm-content">
+        <p class="confirm-text">Are you sure you want to edit the user?</p>
+        <button class="button button-medium button-danger mr-10" id="button-cancel">Cancel</button>
+        <button class="button button-medium button-success" id="button-confirm">Yes</button>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <div class="section-container">
+            <h3 class="section-title">Edit User</h3>
+        </div>
+        <form asp-controller="Admin" asp-action="UserEdit" method="POST" enctype="multipart/form-data" id="form-confirm" autocomplete="off">
+            <div class="row">
+                <div class="col-4">
+                    <div class="section-container">
+                        <h3 class="form-title">Change User Image</h3>
+                        <div class="upload-image-container">
+                            <label for="upload-image-input" class="upload-image-label">
+                                <img src="/folder/images/user-image/@Model.ImageUrl" id="upload-image">
+                                <div class="upload-image-icon-container">
+                                    <i class="fas fa-camera upload-image-icon"></i>
+                                </div>
+                            </label>
+                        
+                            <div class="form-group">
+                                <input type="hidden" asp-for="ImageUrl">
+                                <input id="upload-image-input" type="file" name="file" accept=".jpg, .jpeg, .png">
+                            </div>
+                            <div class="form-group">
+                                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-container">
+                        <h3 class="form-title">Roles</h3>
+                        @foreach (var roleName in ViewBag.Roles)
+                        {
+                            <label asp-for="@roleName" class="checkbox-label mb-10">
+                                <input name="selectedRoles" type="checkbox" class="checkbox" id="@roleName" value="@roleName" @(Model.SelectedRoles.Any(r=>r == roleName)?"checked":"")>
+                                <span class="checkmark"></span>
+                                <span class="label-text">@roleName</span>
+                            </label>
+                        }
+
+                        <hr class="hr-line mb-10">
+
+                        <h3 class="form-title">Email Confirmed</h3>
+                        <label asp-for="EmailConfirmed" class="checkbox-label">
+                            <input asp-for="EmailConfirmed" type="checkbox" class="checkbox">
+                            <span class="checkmark"></span>
+                            <span class="label-text">Is Confirmed</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-8">
+                    <div class="section-container">
+                        <input type="hidden" name="UserId" value="@Model.UserId">
+
+                        <div class="form-group">
+                            <label asp-for="FirstName" class="form-label-icon"><i class="fas fa-user form-icon"></i></label>
+                            <input asp-for="FirstName" class="form-item" placeholder="First Name" tabindex="1">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="LastName" class="form-label-icon"><i class="fas fa-user form-icon"></i></label>
+                            <input asp-for="LastName" class="form-item" placeholder="Last Name" tabindex="2">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="UserName" class="form-label-icon"><i class="fas fa-user form-icon"></i></label>
+                            <input asp-for="UserName" class="form-item" placeholder="User Name" tabindex="3">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Email" class="form-label-icon"><i class="fas fa-envelope form-icon"></i></label>
+                            <input asp-for="Email" class="form-item" placeholder="Email" tabindex="4">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="button button-medium button-theme flex-right" id="button-form" tabindex="5">Edit User</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="/folder/js/upload_image.js"></script>
+    <script src="/folder/js/confirm.js"></script>
+    <script src="/library/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/library/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

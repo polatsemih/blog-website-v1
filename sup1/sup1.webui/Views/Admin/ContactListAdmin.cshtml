@@ -1,0 +1,98 @@
+@model ContactAdmin
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/confirm.css">
+    <link rel="stylesheet" href="/folder/css/result_message.css">
+    <link rel="stylesheet" href="/folder/css/admin_panel.css">
+    <link rel="stylesheet" href="/folder/css/table.css">
+}
+
+@foreach (var item in Model.ContactMessages)
+{
+    <div class="confirm-container confirm-container-@(item.MessageId)">
+        <div class="confirm-content">
+            <p class="confirm-text">Are you sure you want to delete "@(item.Subject)"?</p>
+            <button class="button button-medium button-danger mr-10" id="button-cancel-@(item.MessageId)">Cancel</button>
+            <button class="button button-medium button-success" id="button-confirm-@(item.MessageId)">Yes</button>
+        </div>
+    </div>
+}
+
+@if (TempData["message"] != null)
+{
+    <partial name="_ResultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
+}
+
+<section class="section">
+    <div class="container">
+        <h3 class="section-title">Contact Message List</h3>
+        @if (Model.ContactMessages.Count() > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">Date</th>
+                        <th style="width: 30%;">Subject</th>
+                        <th style="width: 45%;">Message</th>
+                        <th style="width: 10%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ContactMessages)
+                    {
+                        <tr>
+                            <td>@item.DateAdded</td>
+                            <td>@item.Subject</td>
+                            <td>@item.Message</td>
+                            <td>
+                                <div class="row-panel-buttons">
+                                    <a asp-controller="Admin" asp-action="ContactDetailAdmin" asp-route-UserId="@item.UserId" class="button button-small button-theme mb-10 mr-5" title="User Detail"><i class="fas fa-info-circle admin-panel-icon"></i></a>
+
+                                    <form asp-controller="Admin" asp-action="ContactDelete" method="POST" id="form-confirm-@(item.MessageId)">
+                                        <input type="hidden" name="MessageId" value="@item.MessageId">
+                                        <button type="submit" class="button button-small button-theme mb-10 mr-5" id="button-form-@(item.MessageId)" title="Delete"><i class="far fa-trash-alt admin-panel-icon"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert">
+                <p class="alert-text text-danger">No Contact Message Available</p>
+            </div>
+        }
+    </div>
+</section>
+
+@section Scripts
+{
+    @if (TempData["message"] != null)
+    {
+        <script src="/folder/js/result_message.js"></script>
+    }
+    @foreach (var item in Model.ContactMessages)
+    {
+        <script>
+            document.querySelector('#button-form-@(item.MessageId)').addEventListener('click', (e) => {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                document.querySelector('.confirm-container-@(item.MessageId)').classList.add("active");
+            });
+
+            document.querySelector('#button-confirm-@(item.MessageId)').addEventListener('click', () => {
+                document.querySelector('#form-confirm-@(item.MessageId)').submit();
+                document.querySelector('.confirm-container-@(item.MessageId)').classList.remove("active");
+            });
+
+            document.querySelector('#button-cancel-@(item.MessageId)').addEventListener('click', () => {
+                document.querySelector('.confirm-container-@(item.MessageId)').classList.remove("active");
+            });
+        </script>
+    }
+}

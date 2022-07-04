@@ -1,0 +1,50 @@
+@model ContactModel
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/result_message.css ">
+    <link rel="stylesheet" href="/folder/css/form.css ">
+}
+
+@if (TempData["message"] != null)
+{
+    <partial name="_ResultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
+}
+
+<section class="section">
+    <div class="container">
+        <div class="form-container">
+            <h3 class="section-title">Contact</h3>
+            <form asp-controller="Account" asp-action="Contact" method="POST" autocomplete="off">
+                <div class="form-group">
+                    <label asp-for="Subject" class="form-label-icon"><i class="fas fa-tag form-icon"></i></label>
+                    <input asp-for="Subject" class="form-item" placeholder="Subject" tabindex="1">
+                </div>
+                <div class="form-group">
+                    <span asp-validation-for="Subject" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <textarea asp-for="Message" class="form-text-item form-text-300" placeholder="Your Message" tabindex="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <span asp-validation-for="Message" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="button button-medium button-theme flex-right" tabindex="3">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    @if (TempData["message"] != null)
+    {
+        <script src="/folder/js/result_message.js"></script>
+    }
+    <script src="/library/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/library/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

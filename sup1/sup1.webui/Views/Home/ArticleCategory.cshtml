@@ -1,0 +1,116 @@
+@model ArticleListViewModel
+
+@{
+    Layout = "_LayoutWithoutTitle";
+}
+
+@section Title
+{
+    <title>@(Model.PageInfo.CurrentCategory.ToUpper()) | SUP Web Design</title>
+}
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/article.css">
+    <link rel="stylesheet" href="/folder/css/article_preview.css">
+    <link rel="stylesheet" href="/folder/css/pagination.css">
+    <link rel="stylesheet" href="/folder/css/admin_informations.css">
+    <link rel="stylesheet" href="/folder/css/search.css">
+    <link rel="stylesheet" href="/folder/css/category.css">
+}
+
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-9">
+                @if (Model.Articles.Count() > 0)
+                {
+                    @foreach (var article in Model.Articles)
+                    {
+                        @await Html.PartialAsync("_article", article)
+                    }
+                }
+                else
+                {
+                    <div class="alert">
+                        <p class="alert-text text-danger">There is no article for this category</p>
+                    </div>
+                }
+
+                @if (Model.PageInfo.TotalItems > Model.PageInfo.ItemsPerPage)
+                {
+                    <div class="row-pagination">
+                        <nav>
+                            <ul class="pagination">
+                                @{
+                                    if((string)@Context.Request.Query["page"] == null)
+                                    {
+                                        <li class="page-item"><button class="page-link" disabled>Previous</button></li>
+                                    }
+                                    else
+                                    {
+                                        int previousPage;
+                                        if (int.Parse(@Context.Request.Query["page"]) > 1)
+                                        {
+                                            previousPage = (int.Parse(@Context.Request.Query["page"]) - 1);
+                                            <li class="page-item"><a class="page-link" asp-controller="Home" asp-action="ArticleCategory" asp-route-page="@previousPage">Previous</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item"><button class="page-link" disabled>Previous</button></li>
+                                        }
+                                    }
+                                }
+
+                                @for (int i = 0; i < @Model.PageInfo.TotalPages(); i++)
+                                {
+                                    <li class="page-item @(Model.PageInfo.CurrentPage == i+1?"active":"")">
+                                        <a class="page-link" href="/articles/@(Model.PageInfo.CurrentCategory)?page=@(i+1)">
+                                            @(i+1)
+                                        </a>
+                                    </li>
+                                }
+
+                                @{
+                                    int nextPage;
+
+                                    if((string)@Context.Request.Query["page"] == null)
+                                    {
+                                        int page = 1;
+                                        if (page < Model.PageInfo.TotalPages())
+                                        {
+                                            nextPage = page + 1;
+                                            <li class="page-item"><a class="page-link" asp-controller="Home" asp-action="ArticleCategory" asp-route-page="@nextPage">Next</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item"><button class="page-link" disabled>Next</button></li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (int.Parse(@Context.Request.Query["page"]) < Model.PageInfo.TotalPages())
+                                        {
+                                            nextPage = int.Parse(@Context.Request.Query["page"]) + 1;
+                                            <li class="page-item"><a class="page-link" asp-controller="Home" asp-action="ArticleCategory" asp-route-page="@nextPage">Next</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item"><button class="page-link" disabled>Next</button></li>
+                                        }
+                                    }
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                }
+            </div>
+
+            <div class="col-3 flex-reverse">
+                @await Html.PartialAsync("_admin_informations")
+                @await Html.PartialAsync("_search")
+                @await Component.InvokeAsync("Categories")
+            </div>
+        </div>
+    </div>
+</section>

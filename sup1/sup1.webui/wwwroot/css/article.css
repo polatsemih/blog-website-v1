@@ -1,0 +1,16 @@
+/* ARTICLE COMMON SETTINGS */
+
+.article-title {
+    color: var(--color-dark-primary);
+    font-family: var(--family-primary);
+    font-weight: 600;
+}
+
+.article-text {
+    color: var(--color-dark-primary);
+    font-family: var(--family-primary);
+    font-weight: 400;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

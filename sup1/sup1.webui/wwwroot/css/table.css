@@ -1,0 +1,39 @@
+/* TABLE SETTINGS */
+
+.table {
+    background-color: var(--color-light-primary);
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table th {
+    color: var(--color-theme-primary);
+    text-align: left;
+}
+
+.table td,
+.table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    font-size: 13px;
+}
+
+.table tr:hover {
+    background-color: #ddd;
+}
+
+@media only screen and (min-width: 768) {
+    /* TABLE SETTINGS */
+    .table td,
+    .table th {
+        font-size: 16px;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    /* TABLE SETTINGS */
+    .table td,
+    .table th {
+        font-size: 18px;
+    }
+}

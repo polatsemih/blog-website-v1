@@ -1,0 +1,301 @@
+@model ArticleCommentModel
+
+@{
+    Layout = "_LayoutWithoutTitle";
+}
+
+@section Title
+{
+    <title>@Model.Title | SUP Web Design</title>
+}
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/article.css">
+    <link rel="stylesheet" href="/folder/css/article_detail.css">
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/confirm.css">
+    <link rel="stylesheet" href="/folder/css/admin_informations.css">
+    <link rel="stylesheet" href="/folder/css/search.css">
+    <link rel="stylesheet" href="/folder/css/category.css">
+    <link rel="stylesheet" href="/folder/css/result_message.css ">
+}
+
+@if (!string.IsNullOrEmpty(User.Identity.Name))
+{
+    @foreach (var comment in @Model.Comments)
+    {
+        @if (User.Claims.ElementAt(0).Value == comment.UserId)
+        {
+            <div class="confirm-container confirm-container-comment-@(comment.CommentId)">
+                <div class="confirm-content">
+                    <p class="confirm-text">Are you sure you want to delete your comment?</p>
+                    <button class="button button-medium button-danger mr-10" id="button-cancel-comment-@(comment.CommentId)">Cancel</button>
+                    <button class="button button-medium button-success" id="button-confirm-comment-@(comment.CommentId)">Yes</button>
+                </div>
+            </div>
+        }
+    }
+
+    @foreach (var commentreplay in Model.CommentReplies)
+    {
+        if (User.Claims.ElementAt(0).Value == commentreplay.UserId)
+        {
+            <div class="confirm-container confirm-container-comment-replay-@(commentreplay.CommentReplyId)">
+                <div class="confirm-content">
+                    <p class="confirm-text">Are you sure you want to delete your comment reply?</p>
+                    <button class="button button-medium button-danger mr-10" id="button-cancel-comment-replay-@(commentreplay.CommentReplyId)">Cancel</button>
+                    <button class="button button-medium button-success" id="button-confirm-comment-replay-@(commentreplay.CommentReplyId)">Yes</button>
+                </div>
+            </div>
+        }
+    }
+}
+
+@if (TempData["message"] != null)
+{
+    <partial name="_ResultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
+}
+
+<section class="section">
+    <div class="container">
+        <div class="section-container">
+            <div class="row">
+                <div class="col-4">
+                    <img src="/folder/images/article-image/@Model.ImageUrl" alt="@Model.Url" class="img-fluid">
+                </div>
+                <div class="col-8">
+                    <h3 class="article-title">@Model.Title</h3>
+                    <p class="article-text">@Model.Explanation</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-9">
+                <div class="section-container">
+                    <article class="article-detail-text">
+                        @Html.Raw(Model.ArticleContent)
+                    </article>
+                </div>
+                <div class="section-container">
+                    @if (@User.Identity.IsAuthenticated)
+                    {
+                        <form asp-controller="Account" asp-action="CommentCreate" method="POST" autocomplete="off">
+                            <input type="hidden" name="ArticleId" value="@Model.ArticleId">
+                            <input type="hidden" name="Url" value="@Model.Url">
+                            
+                            <div class="form-group">
+                                <textarea asp-for="CommentMessage" class="form-text-item" id="editor" placeholder="Your Comment" tabindex="1"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <span asp-validation-for="CommentMessage" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="button button-medium button-theme flex-right" tabindex="2">Comment</button>
+                            </div>
+                        </form>
+                    }       
+                    <h3 class="article-title">Comments</h3>
+                    @foreach (var comment in @Model.Comments)
+                    {
+                        <div class="comment-container">
+                            <div class="row-comment">
+                                <img src="/folder/images/user-image/@comment.UserImageUrl" alt="user-image" class="comment-image">
+                                <p class="user-comment-informations"><span class="text-theme-secondary">@comment.UserName</span> on @comment.DateAdded</p>
+                                <div class="comment-delete">
+                                    @if (!string.IsNullOrEmpty(User.Identity.Name))
+                                    {
+                                        @if (User.Claims.ElementAt(0).Value == comment.UserId)
+                                        {
+                                            <form asp-controller="Account" asp-action="CommentDelete" method="POST" id="form-confirm-comment-@(comment.CommentId)" autocomplete="off">
+                                                <input type="hidden" name="Url" value="@Model.Url">
+                                                <input type="hidden" name="CommentId" value="@comment.CommentId">
+                                                <button type="submit" title="Delete the comment" class="button-comment" id="button-form-comment-@(comment.CommentId)"><i class="far fa-times-circle comment-delete-icon"></i></button>
+                                            </form>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="comment-text-container">
+                                <p class="comment-text text-break-all">
+                                    @comment.Message
+                                </p>
+                            </div>
+                        </div>
+                        @if (@User.Identity.IsAuthenticated)
+                        {
+                            var id = comment.CommentId;
+                            <button class="button button-small button-theme mb-10 btn-reply@(id)">Reply to comment</button>
+                            <div class="reply reply-box@(id)">
+                                <form asp-controller="Account" asp-action="CommentReplyCreate" method="POST" autocomplete="off">                 
+                                    <input type="hidden" name="CommentId" value="@comment.CommentId">
+                                    <input type="hidden" name="Url" value="@Model.Url">
+                                    
+                                <div class="form-group">
+                                    <textarea asp-for="CommentReplyMessage" class="form-text-item" id="editor@(id)" placeholder="Your Comment Reply"></textarea>
+                                </div>
+                                    <div class="form-group">
+                                    <span asp-validation-for="CommentReplyMessage" class="text-danger"></span>
+                                </div>
+
+                                    <div class="form-group">
+                                        <button type="submit" class="button button-small button-theme flex-right">Answer to comment</button>
+                                    </div>
+                                </form>
+                            </div>
+                        }
+                        @foreach (var commentreplay in Model.CommentReplies)
+                        {
+                            if (commentreplay.CommentId == comment.CommentId)
+                            {
+                                <div class="comment-container ml-30">
+                                    <div class="row-comment">
+                                        <img src="/folder/images/user-image/@commentreplay.UserImageUrl" alt="user-image" class="comment-image">
+                                        <p class="user-comment-informations"><span class="text-theme-secondary">@commentreplay.UserName</span> @commentreplay.DateAdded</p>
+                                        <div class="comment-delete">
+                                            @if (!string.IsNullOrEmpty(User.Identity.Name))
+                                            {
+                                                @if (User.Claims.ElementAt(0).Value == commentreplay.UserId)
+                                                {
+                                                    <div class="flex-right">
+                                                        <form asp-controller="Account" asp-action="CommentReplyDelete" method="POST" id="form-confirm-comment-replay-@(commentreplay.CommentReplyId)" autocomplete="off">
+                                                            <input type="hidden" name="Url" value="@Model.Url">
+                                                            <input type="hidden" name="CommentReplyId" value="@commentreplay.CommentReplyId">
+                                                            <button type="submit" class="button-comment" id="button-form-comment-replay-@(commentreplay.CommentReplyId)"><i class="far fa-times-circle comment-delete-icon"></i></button>
+                                                        </form>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="comment-text-container">
+                                        <p class="comment-text text-break-all">
+                                             @commentreplay.Message
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="col-3 flex-reverse">
+                <div class="article-informations">
+                    <div class="row article-info">
+                        <span class="article-info-text text-theme-secondary">Release Date</span>
+                        <span class="article-info-text">@Model.ArticleDateAdded</span>
+                    </div>
+                    <div class="row article-info">
+                        <span class="article-info-text text-theme-secondary">Last Update Date</span>
+                        <span class="article-info-text">@Model.ArticleDateEdited</span>
+                    </div>
+                    <div class="row article-info">
+                        <span class="article-info-text text-theme-secondary">Total Article Views</span>
+                        <span class="article-info-text">@Model.ArticleViewCount</span>
+                    </div>
+                </div>
+                @await Html.PartialAsync("_admin_informations")
+                @await Html.PartialAsync("_search")
+                <div class="navigation-category">
+                    <nav>
+                        <ul>
+                            @if (User.IsInRole("admin"))
+                            {
+                                <li class="category-item">
+                                    <a asp-controller="Admin" asp-action="ArticleAdminList" class="category-link">All Main Articles</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="category-item">
+                                    <a asp-controller="Home" asp-action="Article" class="category-link">All Main Articles</a>
+                                </li>
+                            }
+                            @foreach (var article in ViewBag.SameCategoryArticles)
+                            {
+                                <li class="category-item @(article.Title == Model.Title?"active-category":"")">
+                                    <a asp-controller="Home" asp-action="ArticleDetail" asp-route-articleUrl="@article.Url" class="category-link">@article.Title</a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script src="/library/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/library/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+    @if (TempData["message"] != null)
+    {
+        <script src="/folder/js/result_message.js"></script>
+    }
+
+    @foreach (var c in @Model.Comments)
+    {
+        <script>
+            $(document).ready(function () {
+                $(".btn-reply@(c.CommentId)").click(function () {
+                    $(".reply-box@(c.CommentId)").fadeToggle();
+
+                    var text = $(".btn-reply@(c.CommentId)").text();
+                    $(".btn-reply@(c.CommentId)").text(text == "Close the comment area" ? "Reply the comment" : "Close the comment area");
+                });
+            });
+        </script>
+    }
+
+    @if (!string.IsNullOrEmpty(User.Identity.Name))
+    {
+        @foreach (var comment in @Model.Comments)
+        {
+            @if (User.Claims.ElementAt(0).Value == comment.UserId)
+            {
+                <script>
+                    document.querySelector('#button-form-comment-@(comment.CommentId)').addEventListener('click', (e) => {
+                        e.stopImmediatePropagation();
+                        e.preventDefault();
+                        document.querySelector('.confirm-container-comment-@(comment.CommentId)').classList.add("active");
+                    });
+
+                    document.querySelector('#button-confirm-comment-@(comment.CommentId)').addEventListener('click', () => {
+                        document.querySelector('#form-confirm-comment-@(comment.CommentId)').submit();
+                        document.querySelector('.confirm-container-comment-@(comment.CommentId)').classList.remove("active");
+                    });
+
+                    document.querySelector('#button-cancel-comment-@(comment.CommentId)').addEventListener('click', () => {
+                        document.querySelector('.confirm-container-comment-@(comment.CommentId)').classList.remove("active");
+                    });
+                </script>
+            }
+        }
+
+        @foreach (var commentreplay in Model.CommentReplies)
+        {
+            @if (User.Claims.ElementAt(0).Value == commentreplay.UserId)
+            {
+                <script>
+                    document.querySelector('#button-form-comment-replay-@(commentreplay.CommentReplyId)').addEventListener('click', (e) => {
+                        e.stopImmediatePropagation();
+                        e.preventDefault();
+                        document.querySelector('.confirm-container-comment-replay-@(commentreplay.CommentReplyId)').classList.add("active");
+                    });
+
+                    document.querySelector('#button-confirm-comment-replay-@(commentreplay.CommentReplyId)').addEventListener('click', () => {
+                        document.querySelector('#form-confirm-comment-replay-@(commentreplay.CommentReplyId)').submit();
+                        document.querySelector('.confirm-container-comment-replay-@(commentreplay.CommentReplyId)').classList.remove("active");
+                    });
+
+                    document.querySelector('#button-cancel-comment-replay-@(commentreplay.CommentReplyId)').addEventListener('click', () => {
+                        document.querySelector('.confirm-container-comment-replay-@(commentreplay.CommentReplyId)').classList.remove("active");
+                    });
+                </script>
+            }
+        }
+    }
+}

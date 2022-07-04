@@ -1,0 +1,33 @@
+@model ContactDetailModel
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/table.css">
+    <link rel="stylesheet" href="/folder/css/admin_panel.css">
+}
+
+<section class="section">
+    <div class="container">
+        <h3 class="section-title">Contact Message Details</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 47%;">User Name</th>
+                    <th style="width: 47%;">Email</th>
+                    <th style="width: 6%;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.UserName</td>
+                    <td>@Model.Email</td>
+                    <td>
+                        <div class="row-panel">
+                            <a asp-controller="Admin" asp-action="UserDetail" asp-route-UserId="@Model.UserId" class="button button-small button-theme" title="User Detail"><i class="fas fa-info-circle admin-panel-icon"></i></a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

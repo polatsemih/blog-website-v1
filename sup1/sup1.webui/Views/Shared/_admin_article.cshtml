@@ -1,0 +1,23 @@
+@model Article
+
+<div class="section-container">
+    <div class="row">
+        <div class="col-3-article">
+            <img src="/folder/images/article-image/@Model.ImageUrl" alt="@Model.Url" class="article-image">
+        </div>
+        <div class="col-9-article">
+            <h3 class="article-title">@Model.Title</h3>
+            <p class="article-text">@Model.Explanation</p>
+        </div>
+    </div>
+    <hr class="hr-line">
+    <div class="row">
+        <a asp-controller="Home" asp-action="ArticleDetail" asp-route-articleUrl="@Model.Url" class="button button-medium button-theme button-flex-right mr-10">Read More</a>
+        <a asp-controller="Admin" asp-action="ArticleEdit" asp-route-articleId="@Model.ArticleId" class="button button-medium button-theme mr-10">Edit</a>
+
+        <form asp-controller="Admin" asp-action="ArticleDelete" method="POST" id="form-confirm-@(Model.ArticleId)">
+            <input type="hidden" name="articleId" value="@Model.ArticleId">
+            <button type="submit" class="button button-medium button-theme" id="button-form-@(Model.ArticleId)">Delete</button>
+        </form>
+    </div>
+</div>

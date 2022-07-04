@@ -1,0 +1,100 @@
+@model IEnumerable<User>
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/confirm.css">
+    <link rel="stylesheet" href="/folder/css/result_message.css">
+    <link rel="stylesheet" href="/folder/css/admin_panel.css">
+    <link rel="stylesheet" href="/folder/css/table.css">
+}
+
+@foreach (var item in Model)
+{
+    <div class="confirm-container confirm-container-@(item.Id)">
+        <div class="confirm-content">
+            <p class="confirm-text">Are you sure you want to delete "@(item.UserName)"?</p>
+            <button class="button button-medium button-danger mr-10" id="button-cancel-@(item.Id)">Cancel</button>
+            <button class="button button-medium button-success" id="button-confirm-@(item.Id)">Yes</button>
+        </div>
+    </div>
+}
+
+@if (TempData["message"] != null)
+{
+    <partial name="_ResultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
+}
+
+<section class="section">
+    <div class="container">
+        <h3 class="section-title">User List</h3>
+        <a class="button button-medium button-theme mb-20" asp-controller="Admin" asp-action="UserCreate">Create User</a>
+        @if (Model.Count() > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>    
+                        <th style="width: 30%;">User Name</th>
+                        <th style="width: 35%;">Email</th>
+                        <th style="width: 20%;">Email Confirmed</th>
+                        <th style="width: 15%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="@(item.EmailConfirmed?"":"background-warning")">
+                            <td>@item.UserName</td>
+                            <td class="text-break-all">@item.Email</td>
+                            <td>@item.EmailConfirmed</td>
+                            <td>
+                                <div class="row-panel-buttons">
+                                    <a asp-controller="Admin" asp-action="UserDetail" asp-route-UserId="@item.Id" class="button button-small button-theme mb-10 mr-5" title="User Details"><i class="fas fa-info-circle admin-panel-icon"></i></a>
+                                    <a asp-controller="Admin" asp-action="UserEdit" asp-route-UserId="@item.Id" class="button button-small button-theme mb-10 mr-5" title="Edit"><i class="fas fa-edit admin-panel-icon"></i></a>
+
+                                    <form asp-controller="Admin" asp-action="UserDelete" method="POST" id="form-confirm-@(item.Id)">
+                                        <input type="hidden" name="UserId" value="@item.Id">
+                                        <button type="submit" class="button button-small button-theme mb-10 mr-5" id="button-form-@(item.Id)" title="Delete"><i class="far fa-trash-alt admin-panel-icon"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-danger mt-20">
+                <p>No User Available</p>
+            </div>
+        }
+    </div>
+</section>
+
+@section Scripts
+{
+    @if (TempData["message"] != null)
+    {
+        <script src="/folder/js/result_message.js"></script>
+    }
+    @foreach (var item in Model)
+    {
+        <script>
+            document.querySelector('#button-form-@(item.Id)').addEventListener('click', (e) => {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                document.querySelector('.confirm-container-@(item.Id)').classList.add("active");
+            });
+
+            document.querySelector('#button-confirm-@(item.Id)').addEventListener('click', () => {
+                document.querySelector('#form-confirm-@(item.Id)').submit();
+                document.querySelector('.confirm-container-@(item.Id)').classList.remove("active");
+            });
+
+            document.querySelector('#button-cancel-@(item.Id)').addEventListener('click', () => {
+                document.querySelector('.confirm-container-@(item.Id)').classList.remove("active");
+            });
+        </script>
+    }
+}

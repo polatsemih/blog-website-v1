@@ -1,0 +1,184 @@
+@model UserProfileModel
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/confirm.css">
+    <link rel="stylesheet" href="/folder/css/result_message.css">
+    <link rel="stylesheet" href="/folder/css/checkbox.css">
+    <link rel="stylesheet" href="/folder/css/upload_image.css">
+}
+
+<div class="confirm-container confirm-container-1">
+    <div class="confirm-content">
+        <p class="confirm-text">Are you sure you want to update your account informations?</p>
+        <button class="button button-medium button-danger mr-10" id="button-cancel-1">Cancel</button>
+        <button class="button button-medium button-success" id="button-confirm-1">Yes</button>
+    </div>
+</div>
+
+<div class="confirm-container confirm-container-2">
+    <div class="confirm-content">
+        <p class="confirm-text">Are you sure you want to delete your account?</p>
+        <button class="button button-medium button-danger mr-10" id="button-cancel-2">Cancel</button>
+        <button class="button button-medium button-success" id="button-confirm-2">Yes</button>
+    </div>
+</div>
+
+@if (TempData["message"] != null)
+{
+    <partial name="_ResultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
+}
+
+<section class="section">
+    <div class="container">
+        <form asp-controller="Account" asp-action="UserProfile" method="POST" enctype="multipart/form-data" id="form-confirm-1" autocomplete="off">
+            <div class="row">
+                <div class="col-4">
+                    <div class="section-container">
+                        <h3 class="form-title">Change Profile Image</h3>
+                        <div class="upload-image-container">
+                            <label for="upload-image-input" class="upload-image-label">
+                                <img src="/folder/images/user-image/@Model.ImageUrl" id="upload-image">
+                                <div class="upload-image-icon-container">
+                                    <i class="fas fa-camera upload-image-icon"></i>
+                                </div>
+                            </label>
+                        
+                            <div class="form-group">
+                                <input type="hidden" asp-for="ImageUrl">
+                                <input id="upload-image-input" type="file" name="file" accept=".jpg, .jpeg, .png">
+                            </div>
+                            <div class="form-group">
+                                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-8">
+                    <div class="section-container">
+                        <div class="form-group">
+                            <label asp-for="FirstName" class="form-label-icon"><i class="fas fa-user form-icon"></i></label>
+                            <input asp-for="FirstName" class="form-item" placeholder="First Name" tabindex="1">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="LastName" class="form-label-icon"><i class="fas fa-user form-icon"></i></label>
+                            <input asp-for="LastName" class="form-item" placeholder="Last Name" tabindex="2">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="UserName" class="form-label-icon"><i class="fas fa-user form-icon"></i></label>
+                            <input asp-for="UserName" class="form-item" placeholder="User Name" tabindex="3">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Email" class="form-label-icon"><i class="fas fa-envelope form-icon"></i></label>
+                            <input asp-for="Email" class="form-item" placeholder="Email" tabindex="4">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <h3 class="form-title">Change Password</h3>
+
+                        <div class="form-group">
+                            <label asp-for="CurrentPassword" class="form-label-icon"><i class="fas fa-lock form-icon"></i></label>
+                            <input asp-for="CurrentPassword" class="form-item" placeholder="Current Password" tabindex="5">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="NewPassword" class="form-label-icon"><i class="fas fa-lock form-icon"></i></label>
+                            <input asp-for="NewPassword" class="form-item" placeholder="New Password" tabindex="6">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="NewPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="RePassword" class="form-label-icon"><i class="fas fa-lock form-icon"></i></label>
+                            <input asp-for="RePassword" class="form-item" placeholder="Re-Password" tabindex="7">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="RePassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="button button-medium button-theme flex-right" id="button-form-1" tabindex="8">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-8" style="margin-left: auto;">
+                <div class="section-container">
+                    <h3 class="form-title">Delete Account</h3>
+                    <form asp-controller="Account" asp-action="UserDelete" method="POST" id="form-confirm-2" autocomplete="off">
+                        <button type="submit" class="button button-medium button-theme" id="button-form-2">Delete My Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    @if (TempData["message"] != null)
+    {
+        <script src="/folder/js/result_message.js"></script>
+    }
+    <script src="/folder/js/upload_image.js"></script>
+    <script src="/library/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/library/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        const confirmContainer1 = document.querySelector('.confirm-container-1');
+
+        document.querySelector('#button-form-1').addEventListener('click', (e) => {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            confirmContainer1.classList.add("active");
+        });
+
+        document.querySelector('#button-confirm-1').addEventListener('click', () => {
+            document.querySelector('#form-confirm-1').submit();
+            confirmContainer1.classList.remove("active");
+        });
+
+        document.querySelector('#button-cancel-1').addEventListener('click', () => {
+            confirmContainer1.classList.remove("active");
+        });
+    </script>
+    <script>
+        const confirmContainer2 = document.querySelector('.confirm-container-2');
+
+        document.querySelector('#button-form-2').addEventListener('click', (e) => {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            confirmContainer2.classList.add("active");
+        });
+
+        document.querySelector('#button-confirm-2').addEventListener('click', () => {
+            document.querySelector('#form-confirm-2').submit();
+            confirmContainer2.classList.remove("active");
+        });
+
+        document.querySelector('#button-cancel-2').addEventListener('click', () => {
+            confirmContainer2.classList.remove("active");
+        });
+    </script>
+}

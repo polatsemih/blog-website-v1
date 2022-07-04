@@ -1,0 +1,27 @@
+.button-scrollToTop {
+    z-index: 666;
+    position: fixed;
+    bottom: 10px;
+    right: 0px;
+    background-color: var(--color-theme-primary);
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.footer-icon {
+    color: var(--color-light-primary);
+    font-size: 25px;
+    line-height: 40px;
+}
+
+.button-scrollToTop.active {
+    right: 10px;
+    opacity: 1;
+    pointer-events: auto;
+}

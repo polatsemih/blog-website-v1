@@ -1,0 +1,81 @@
+@model RegisterModel
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/result_message.css">
+}
+
+@if (TempData["message"] != null)
+{
+    <partial name="_ResultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
+}
+
+<section class="section">
+    <div class="form-container">
+        <h3 class="section-title">REGISTER</h3>
+        <form asp-controller="Account" asp-action="Register" method="POST" autocomplete="off">
+            <div class="form-group">
+                <label asp-for="FirstName" class="form-label-icon"><i class="fas fa-user form-icon"></i></label>
+                <input asp-for="FirstName" class="form-item" placeholder="First Name" tabindex="1">
+            </div>
+            <div class="form-group">
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LastName" class="form-label-icon"><i class="fas fa-user form-icon"></i></label>
+                <input asp-for="LastName" class="form-item" placeholder="Last Name" tabindex="2">
+            </div>
+            <div class="form-group">
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UserName" class="form-label-icon"><i class="fas fa-user form-icon"></i></label>
+                <input asp-for="UserName" class="form-item" placeholder="User Name" tabindex="3">
+            </div>
+            <div class="form-group">
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="form-label-icon"><i class="fas fa-envelope form-icon"></i></label>
+                <input asp-for="Email" class="form-item" placeholder="Email" tabindex="4">
+            </div>
+            <div class="form-group">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password" class="form-label-icon"><i class="fas fa-lock form-icon"></i></label>
+                <input asp-for="Password" class="form-item" placeholder="Password" tabindex="5">
+            </div>
+            <div class="form-group">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="RePassword" class="form-label-icon"><i class="fas fa-lock form-icon"></i></label>
+                <input asp-for="RePassword" class="form-item" placeholder="RePassword" tabindex="6">
+            </div>
+            <div class="form-group">
+                <span asp-validation-for="RePassword" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="button button-medium button-theme flex-right" tabindex="7">Register</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts
+{
+    @if (TempData["message"] != null)
+    {
+        <script src="/folder/js/result_message.js"></script>
+    }
+    <script src="/library/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/library/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

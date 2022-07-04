@@ -1,0 +1,9 @@
+@model Article
+
+<div class="confirm-container confirm-container-@(Model.ArticleId)">
+    <div class="confirm-content">
+        <p class="confirm-text">Are you sure you want to delete "@(Model.Title)"?</p>
+        <button class="button button-medium button-danger mr-10" id="button-cancel-@(Model.ArticleId)">Cancel</button>
+        <button class="button button-medium button-success" id="button-confirm-@(Model.ArticleId)">Yes</button>
+    </div>
+</div>

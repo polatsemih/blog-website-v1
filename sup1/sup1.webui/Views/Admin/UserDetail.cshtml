@@ -1,0 +1,45 @@
+@model UserDetailsModel
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/table.css">
+    <link rel="stylesheet" href="/folder/css/admin_panel.css">
+}
+
+<section class="section">
+    <div class="container">
+        <h3 class="section-title">User Details</h3>
+        <table class="table">
+            <thead>
+                <tr>    
+                    <th style="width: 20%;">Id</th>
+                    <th style="width: 25%;">First Name</th>
+                    <th style="width: 25%;">Last Name</th>
+                    <th style="width: 20%;">User Image</th>
+                    <th style="width: 10%;"></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td>@Model.UserId</td>
+                    <td>@Model.FirstName</td>
+                    <td>@Model.LastName</td>
+                    <td><img src="/folder/images/user-image/@Model.ImageUrl" alt="user-image" class="img-fluid"></td>
+                    <td>
+                        <div class="row-panel-buttons">
+                            <a asp-controller="Admin" asp-action="UserEdit" asp-route-UserId="@Model.UserId" class="button button-small button-theme mb-10 mr-5" title="Edit"><i class="fas fa-edit admin-panel-icon"></i></a>
+
+                            <form asp-controller="Admin" asp-action="UserDelete" method="POST">
+                                <input type="hidden" name="UserId" value="@Model.UserId">
+                                <button type="submit" class="button button-small button-theme mb-10 mr-5" title="Delete"><i class="far fa-trash-alt admin-panel-icon"></i></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</section>

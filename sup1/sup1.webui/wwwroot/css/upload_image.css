@@ -1,0 +1,38 @@
+/* UPLOAD IMAGE SETTINGS */
+
+.upload-image-container {
+    width: 100%;
+    min-height: 150px;
+}
+
+.upload-image-label {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 170px;
+    cursor: pointer;
+}
+
+#upload-image-input {
+    z-index: -100;
+}
+
+#upload-image {
+    max-width: 150px;
+}
+
+.upload-image-icon-container {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+
+.upload-image-icon {
+    font-size: 40px;
+    transition: all 0.5s;
+    opacity: 0.2;
+}
+
+.upload-image-label:hover .upload-image-icon {
+    opacity: 1;
+}

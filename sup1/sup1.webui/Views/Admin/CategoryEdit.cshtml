@@ -1,0 +1,93 @@
+@model CategoryModel
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/article.css">
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/confirm.css">
+    <link rel="stylesheet" href="/folder/css/admin_panel.css">
+    <link rel="stylesheet" href="/folder/css/table.css">
+}
+
+<div class="confirm-container">
+    <div class="confirm-content">
+        <p class="confirm-text">Are you sure you want to edit the category name?</p>
+        <button class="button button-medium button-danger mr-10" id="button-cancel">Cancel</button>
+        <button class="button button-medium button-success" id="button-confirm">Yes</button>
+    </div>
+</div>
+
+<div class="section">
+    <div class="admin-panel-container">
+        <div class="admin-panel-form-container">
+            <h3 class="section-title">Edit Category</h3>
+            <form asp-controller="Admin" asp-action="CategoryEdit" method="POST" id="form-confirm" autocomplete="off">
+                <div class="form-group">
+                    <label asp-for="Name" class="form-label-icon"><i class="fas fa-tag form-icon"></i></label>
+                    <input asp-for="Name" class="form-item" placeholder="Role Name" tabindex="1">
+                </div>
+                <div class="form-group">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="button button-medium button-theme flex-right" id="button-form" tabindex="2">Edit Category Name</button>
+                </div>
+
+                <div>
+                    @for (int i = 0; i < Model.Articles.Count; i++)
+                    {
+                        <input type="hidden" name="Articles[@i].ArticleId" value="@Model.Articles[@i].ArticleId">
+                        <input type="hidden" name="Articles[@i].Title" value="@Model.Articles[@i].Title">
+                        <input type="hidden" name="Articles[@i].Explanation" value="@Model.Articles[@i].Explanation">
+                        <input type="hidden" name="Articles[@i].ImageUrl" value="@Model.Articles[@i].ImageUrl">
+                    }
+                </div>
+            </form>
+        </div>
+
+        @if (Model.Articles.Count() > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">Id</th>
+                        <th style="width: 25%;">Image</th>
+                        <th style="width: 25%;">Title</th>
+                        <th style="width: 40%;">Explanation</th>
+                        <th style="width: 5%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Articles)
+                    {
+                        <tr>
+                            <td>@item.ArticleId</td>
+                            <td>
+                                <img src="/folder/images/article-image/@item.ImageUrl" alt="article-image" class="img-fluid">
+                            </td>
+                            <td>@item.Title</td>
+                            <td>@item.Explanation</td>
+                            <td> 
+                                <a asp-controller="Admin" asp-action="ArticleEdit" asp-route-articleId="@item.ArticleId" class="button button-small button-theme"><i class="fas fa-edit admin-panel-icon"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert">
+                <p class="alert-text text-danger">No Article Available</p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="/folder/js/confirm.js"></script>
+    <script src="/library/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/library/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

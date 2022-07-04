@@ -1,0 +1,112 @@
+@model RoleEditModel
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/article.css">
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/confirm.css">
+    <link rel="stylesheet" href="/folder/css/admin_panel.css">
+    <link rel="stylesheet" href="/folder/css/table.css">
+    <link rel="stylesheet" href="/folder/css/checkbox.css">
+    <link rel="stylesheet" href="/folder/css/result_message.css">
+}
+
+<div class="confirm-container">
+    <div class="confirm-content">
+        <p class="confirm-text">Are you sure you want to edit the role?</p>
+        <button class="button button-medium button-danger mr-10" id="button-cancel">Cancel</button>
+        <button class="button button-medium button-success" id="button-confirm">Yes</button>
+    </div>
+</div>
+
+@if (TempData["message"] != null)
+{
+    <partial name="_ResultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
+}
+
+<div class="section">
+    <div class="admin-panel-container">
+        <div class="admin-panel-form-container">
+            <h3 class="section-title">Edit Role</h3>
+            <form asp-controller="Admin" asp-action="RoleEdit" method="POST" id="form-confirm" autocomplete="off">
+                <input type="hidden" name="RoleId" value="@Model.RoleId">
+
+                <div class="form-group">
+                    <label asp-for="RoleName" class="form-label-icon"><i class="fas fa-tag form-icon"></i></label>
+                    <input asp-for="RoleName" class="form-item" placeholder="Role Name" tabindex="1">
+                </div>
+                <div class="form-group">
+                    <span asp-validation-for="RoleName" class="text-danger"></span>
+                </div>
+
+                <h3 class="section-title">Add user to role of <span class="text-theme-secondary">@Model.RoleName</span></h3>
+
+                <table class="table mb-20">
+                    @if (Model.NonMembers.Count() == 0)
+                    {
+                        <tr>
+                            <td class="alert-text text-danger">All users belong to "@(Model.RoleName)" role</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var user in Model.NonMembers)
+                        {
+                            <tr>
+                                <td style="width: 90%;">@user.UserName</td>
+                                <td style="width: 10%;">
+                                    <label for="@user.Id" class="checkbox-label">
+                                        <input name="IdsToAdd" id="@user.Id" type="checkbox" class="checkbox" value="@user.Id">
+                                        <span class="checkmark"></span>
+                                        <span class="label-text">Add</span>
+                                    </label>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+
+                <h3 class="section-title">Remove user from role of <span class="text-theme-secondary">@Model.RoleName</span></h3>
+                <table class="table mb-20">
+                    @if (Model.Members.Count() == 0)
+                    {
+                        <tr>
+                            <td class="alert-text text-danger">No user belongs to "@(Model.RoleName)" role</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var user in Model.Members)
+                        {
+                            <tr>
+                                <td style="width: 90%;">@user.UserName</td>
+                                <td style="width: 10%;">
+                                    <label for="@user.Id" class="checkbox-label">
+                                        <input name="IdsToDelete" id="@user.Id" type="checkbox" class="checkbox" value="@user.Id">
+                                        <span class="checkmark"></span>
+                                        <span class="label-text">Remove</span>
+                                    </label>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+
+                <div class="form-group">
+                    <button type="submit" class="button button-medium button-theme flex-right" id="button-form" tabindex="2">Edit Role</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @if (TempData["message"] != null)
+    {
+        <script src="/folder/js/result_message.js"></script>
+    }
+    <script src="/folder/js/confirm.js"></script>
+    <script src="/library/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/library/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

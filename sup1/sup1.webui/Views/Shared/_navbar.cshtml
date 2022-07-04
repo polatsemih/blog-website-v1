@@ -1,0 +1,64 @@
+<header>
+    <div class="container">
+        <nav class="navigation">
+            <a asp-controller="Home" asp-action="Index" class="logo-site">SUP</a>
+
+            <ul class="nav-menu">                 
+                <li class="menu-item">
+                    <a asp-controller="Home" asp-action="Index" class="menu-link">SUP</a>
+                </li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @if (User.IsInRole("admin"))
+                    {
+                        <li class="menu-item">
+                            <a asp-controller="Admin" asp-action="ArticleAdminList" class="menu-link text-theme-secondary">Article</a>
+                        </li>
+                        <li class="menu-item">
+                            <a asp-controller="Admin" asp-action="CategoryList" class="menu-link text-theme-secondary">Category</a>
+                        </li>
+                        <li class="menu-item">
+                            <a asp-controller="Admin" asp-action="UserList" class="menu-link text-theme-secondary">User</a>
+                        </li>
+                        <li class="menu-item">
+                            <a asp-controller="Admin" asp-action="RoleList" class="menu-link text-theme-secondary">Role</a>
+                        </li>
+                        <li class="menu-item">
+                            <a asp-controller="Admin" asp-action="ContactListAdmin" class="menu-link text-theme-secondary">Message</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="menu-item">
+                            <a asp-controller="Home" asp-action="Article" class="menu-link">Articles</a>
+                        </li>
+                    }
+                    <li class="menu-item">
+                        <a asp-controller="Account" asp-action="Contact" class="menu-link">Contact</a>
+                    </li>
+                    <li class="menu-item">
+                        <a asp-controller="Account" asp-action="UserProfile" class="menu-link text-theme-secondary">@User.Claims.ElementAt(1).Value</a>
+                    </li>
+                    <li class="menu-item">
+                        <a asp-controller="Account" asp-action="Logout" class="menu-link">Log Out</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="menu-item">
+                        <a asp-controller="Home" asp-action="Article" class="menu-link">Articles</a>
+                    </li>
+                    <li class="menu-item">
+                        <a asp-controller="Account" asp-action="Login" class="menu-link">Log In</a>
+                    </li>
+                    <li class="menu-item">
+                        <a asp-controller="Account" asp-action="Register" class="menu-link">Sign Up</a>
+                    </li>
+                }
+            </ul>
+
+            <img src="/folder/images/menu-image/menu.jpg" alt="menu" class="image-menu menu-open active">
+            <img src="/folder/images/menu-image/close.jpg" alt="menu" class="image-menu menu-close">
+        </nav>
+    </div>
+</header>

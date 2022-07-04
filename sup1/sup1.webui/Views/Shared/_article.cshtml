@@ -1,0 +1,17 @@
+@model Article
+
+<div class="section-container">
+    <div class="row">
+        <div class="col-3-article">
+            <img src="/folder/images/article-image/@Model.ImageUrl" alt="@Model.Url" class="article-image">
+        </div>
+        <div class="col-9-article">
+            <h3 class="article-title">@Model.Title</h3>
+            <p class="article-text">@Model.Explanation</p>
+        </div>
+    </div>
+    <hr class="hr-line">
+    <div class="row">
+        <a asp-controller="Home" asp-action="ArticleDetail" asp-route-articleUrl="@(Html.Raw(Model.Url))" class="button button-medium button-theme flex-right">Read More</a>
+    </div>
+</div>

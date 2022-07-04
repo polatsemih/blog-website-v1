@@ -1,0 +1,25 @@
+footer {
+    background-color: var(--color-nav);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+    text-align: center;
+}
+
+.text-copyright {
+    color: var(--color-light-primary);
+    font-family: var(--family-primary);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.text-copyright:not(:last-child) {
+    margin-bottom: 3px;
+}
+
+@media only screen and (min-width: 992px) {
+    .text-copyright {
+        font-size: 14px;
+    }
+}

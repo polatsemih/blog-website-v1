@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Basic Page Needs -->
+        @RenderSection("Title", false)
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Content-Language" content="en_US" />
+        <meta name="Description" content="SUP, Html 5, Css, Javascript, ASP.Net Core MVC, Web Tasarımı, Front End Developer, Back End Developer">
+        <meta name="author" content="SUP">
+        <meta name="Keywords" content="Sup">
+
+        <!-- Favicons -->
+        <link rel="shortcut icon" href="/folder/images/favicon.jpg">
+
+        <!-- Mobile Specific Metas -->
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,400;1,600&display=swap" rel="stylesheet">
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
+        <link rel="stylesheet" href="/folder/css/common.css">
+        <link rel="stylesheet" href="/folder/css/navigation_menu.css">
+        <link rel="stylesheet" href="/folder/css/footer.css">
+        <link rel="stylesheet" href="/folder/css/back_to_top.css">
+        @RenderSection("Css", false)
+    </head>
+
+    <body>
+
+        @await Html.PartialAsync("_navbar")
+
+        <main>
+
+            @RenderBody()
+            
+        </main>
+        
+        @await Html.PartialAsync("_footer")
+        
+        <script src="/folder/js/navigation_menu.js"></script>
+        <script src="/folder/js/back_to_top.js"></script>
+        <script src="/library/jquery/dist/jquery.min.js"></script>
+
+        @RenderSection("Scripts", false)
+    </body>
+</html>

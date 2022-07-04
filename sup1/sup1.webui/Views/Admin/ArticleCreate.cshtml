@@ -1,0 +1,113 @@
+@model ArticleModel
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/confirm.css">
+    <link rel="stylesheet" href="/folder/css/upload_image.css">
+    <link rel="stylesheet" href="/folder/css/checkbox.css">
+    <link rel="stylesheet" href="/folder/css/form_select.css">
+}
+
+<div class="confirm-container">
+    <div class="confirm-content">
+        <p class="confirm-text">Are you sure you want to insert a new article header?</p>
+        <button class="button button-medium button-danger mr-10" id="button-cancel">Cancel</button>
+        <button class="button button-medium button-success" id="button-confirm">Yes</button>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <form asp-controller="Admin" asp-action="ArticleCreate" method="POST" enctype="multipart/form-data" id="form-confirm" autocomplete="off">
+            <div class="section-container">
+                <div class="row">
+                    <div class="col-5">
+                        <h3 class="form-title">Upload Article Image</h3>
+                        <div class="upload-image-container">
+                            <label for="upload-image-input" class="upload-image-label">
+                                <img src="" id="upload-image">
+                                <div class="upload-image-icon-container">
+                                    <i class="fas fa-camera upload-image-icon"></i>
+                                </div>
+                            </label>
+                        
+                            <div class="form-group">
+                                <input type="hidden" asp-for="ImageUrl">
+                                <input id="upload-image-input" type="file" name="file" accept=".jpg, .jpeg, .png">
+                            </div>
+                            <div class="form-group">
+                                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div class="row">
+                            <div class="col-6">
+                                <h3 class="form-title">Is Home</h3>
+                                <div class="form-group">
+                                    <label asp-for="IsHome" class="checkbox-label">
+                                        <input asp-for="IsHome" type="checkbox" class="checkbox">
+                                        <span class="checkmark"></span>
+                                        <span class="label-text">Is Home</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <h3 class="form-title">Categories</h3>
+                                <div class="form-group">
+                                    <div class="select-container">
+                                        <select name="categoryId" class="select">
+                                            <option class="select-item" value="0">Select Category</option>
+                                            @foreach (var item in (List<Category>)ViewBag.Categories)
+                                            {
+                                                <option class="select-item" value="@item.CategoryId">@item.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="IsHome" class="text-danger"></span>
+                        </div>         
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label asp-for="Title" class="form-label-icon"><i class="fas fa-pen form-icon"></i></label>
+                            <input asp-for="Title" class="form-item" placeholder="Title" tabindex="1">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Explanation" class="form-label-icon"><i class="fas fa-pen form-icon"></i></label>
+                            <input asp-for="Explanation" class="form-item" placeholder="Explanation" tabindex="2">
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="Explanation" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="button button-medium button-theme flex-right" id="button-form" tabindex="3">Create Article Header</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script src="/folder/js/confirm.js"></script>
+    <script src="/folder/js/upload_image.js"></script>
+    <script src="/library/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/library/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

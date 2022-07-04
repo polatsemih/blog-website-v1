@@ -1,0 +1,105 @@
+@model ArticleContentModel
+
+@section Css
+{
+    <link rel="stylesheet" href="/folder/css/form.css">
+    <link rel="stylesheet" href="/folder/css/confirm.css">
+    <link rel="stylesheet" href="/folder/css/result_message.css">
+    <script src="https://cdn.tiny.cloud/1/9ek0zgmodpfeu8nbgmxo6rocg28s2us5pqzb0oar3suibw58/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: '#formTextarea',
+            plugins: ['autolink link image lists charmap print preview hr searchreplace wordcount code fullscreen insertdatetime media table emoticons paste'],
+            toolbar: 'undo redo | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | hr charmap emoticons insertdatetime | print | code preview fullscreen',
+            menubar: 'edit format table',
+            images_upload_url: '/article/uploadimage',
+            image_title: true,
+            images_upload_handler: function(blobInfo, success, failure) {
+                var xhr, formData;
+
+                xhr = new XMLHttpRequest();
+                xhr.withCredentials = false;
+                xhr.open('POST', '/article/uploadimage');
+                xhr.onload = function() {
+                    var json;
+
+                    if (xhr.status != 200) {
+                        failure('HTTP Error');
+                        return;
+                    }
+
+                    json = JSON.parse(xhr.responseText);
+
+                    if (!json || typeof json.location != 'string') {
+                        failure('Invalid JSON');
+                        return;
+                    }
+
+                    success(json.location);
+                };
+
+                formData = new FormData();
+                formData.append('file', blobInfo.blob(), blobInfo.filename());
+                formData.append('articleId', @(Model.ArticleId)+"");
+
+                xhr.send(formData);
+            }
+        });
+    </script>
+    <style>
+        .tox-tinymce {
+            width: 100%!important;
+        }
+    </style>
+}
+
+<div class="confirm-container">
+    <div class="confirm-content">
+        <p class="confirm-text">Are you sure you want to add the content to article?</p>
+        <button class="button button-medium button-danger mr-10" id="button-cancel">Cancel</button>
+        <button class="button button-medium button-success" id="button-confirm">Yes</button>
+    </div>
+</div>
+
+@if (TempData["message"] != null)
+{
+    <partial name="_ResultMessage" model="@(TempData.Get<AlertMessage>("message"))" />
+}
+
+<section class="section">
+    <div class="container">
+        <form asp-controller="Admin" asp-action="ArticleContentCreate" method="POST" id="form-confirm" autocomplete="off">
+            <div class="row-justify-center">
+                <div class="col-9">
+                    <div class="section-container">
+                        <h3 class="form-title">Create Article Content</h3>
+
+                        <input type="hidden" asp-for="ArticleId">
+
+                        <div class="form-group">
+                            <textarea asp-for="ArticleContent" id="formTextarea" class="form-text-item form-text-height" tabindex="1"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <span asp-validation-for="ArticleContent" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="button button-medium button-theme flex-right" id="button-form" tabindex="2">Create</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts
+{
+    @if (TempData["message"] != null)
+    {
+        <script src="/folder/js/result_message.js"></script>
+    }
+    <script src="/folder/js/confirm.js"></script>
+    <script src="/library/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/library/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

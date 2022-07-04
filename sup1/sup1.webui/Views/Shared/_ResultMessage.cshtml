@@ -1,0 +1,13 @@
+@model AlertMessage
+
+<div class="alert-container background-@Model.AlertType">
+    <div class="row-alert">
+        <div class="col-1">
+            <i class="far fa-times-circle alert-close-icon"></i>
+        </div>
+        <div class="col-11">
+            <h4 class="alert-title">@Model.Title</h4>
+            <p class="alert-text alert-text-light">@Model.Message</p>
+        </div>
+    </div>
+</div>
